@@ -6,13 +6,13 @@ This is a monorepo containing both the backend and frontend components for the B
 
 ```
 brex-interview-playground/
-├── backend-kotlin/    # Kotlin Spring Boot Backend
+├── backend-java/      # Java Spring Boot Backend
 │   ├── src/
 │   │   └── main/
-│   │       ├── kotlin/
+│   │       ├── java/
 │   │       │   └── brex/interview/
 │   │       │       ├── config/      # Application configuration
-│   │       │       ├── controller/  # REST controllers
+│   │       │       ├── rest/        # REST controllers
 │   │       │       ├── graphql/     # GraphQL resolvers
 │   │       │       ├── model/       # Domain models
 │   │       │       ├── dto/         # Data transfer objects
@@ -21,17 +21,7 @@ brex-interview-playground/
 │   │       └── resources/
 │   │           ├── graphql/         # GraphQL schema
 │   │           └── schema/          # Database schema
-│   └── test/                        # Test files
-├── backend-python/   # Python FastAPI Backend (Alternative)
-│   ├── src/
-│   │   └── app/
-│   │       ├── api/
-│   │       │   ├── graphql/     # GraphQL schema and resolvers
-│   │       │   └── rest/        # REST API endpoints
-│   │       ├── database/        # Database configuration
-│   │       ├── models/          # SQLAlchemy models
-│   │       └── schemas/         # Pydantic schemas
-│   └── tests/                   # Test files
+│   └── src/test/                    # Test files
 └── frontend/        # T3 Stack Frontend
     ├── src/
     │   ├── app/              # Next.js app router pages
@@ -44,24 +34,14 @@ brex-interview-playground/
     └── tests/               # Test files
 ```
 
-### Backend Options
+### Backend
 
-You can choose between two backend implementations:
+#### Java Spring Boot Backend
 
-#### Kotlin Spring Boot Backend
-
-The Kotlin backend is a Spring Boot application that provides:
+The Java backend is a Spring Boot application that provides:
 - REST and GraphQL APIs for simple message operations
 - H2 in-memory database
 - Basic message CRUD functionality
-
-#### Python FastAPI Backend (Alternative)
-
-The Python backend is a FastAPI application that provides:
-- REST and GraphQL APIs for simple message operations
-- SQLAlchemy with SQLite database
-- Strawberry GraphQL integration
-- Pydantic for data validation
 
 ### Frontend (T3 Stack)
 
@@ -74,13 +54,9 @@ The frontend is built with the T3 Stack, featuring:
 
 ### Prerequisites
 
-For Kotlin backend:
-- JDK 11 or higher
+For Java backend:
+- JDK 17 or higher
 - Gradle (for building the project)
-
-For Python backend:
-- Python 3.8 or higher
-- Poetry (for dependency management)
 
 For frontend:
 - Node.js 18 or higher
@@ -90,11 +66,11 @@ For frontend:
 
 ### Running the Backend
 
-#### Option 1: Kotlin Backend
+#### Java Backend
 
 1. **Build the Project**:
    ```bash
-   cd backend-kotlin
+   cd backend-java
    ./gradlew build
    ```
 
@@ -107,29 +83,6 @@ For frontend:
    - REST API: `http://localhost:8080/api/`
       - i.e. `http://localhost:8080/api/messages/latest`
    - GraphQL API: `http://localhost:8080/graphql`
-
-#### Option 2: Python Backend
-
-1. **Install Poetry** (if not already installed):
-   ```bash
-   curl -sSL https://install.python-poetry.org | python3 -
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   cd backend-python
-   poetry install
-   ```
-
-3. **Run the Development Server**:
-   ```bash
-   poetry run uvicorn src.app.main:app --reload --port 8080
-   ```
-
-4. **Access the Application**:
-   - REST API: `http://localhost:8080/api/`
-      - i.e. `http://localhost:8080/api/messages/latest`
-   - GraphQL Playground: `http://localhost:8080/graphql`
 
 ### Running the Frontend
 
@@ -157,8 +110,7 @@ For frontend:
 
 #### Testing GraphQL
 - Access the GraphQL IDE:
-  - For Kotlin backend: `http://localhost:8080/graphiql`
-  - For Python backend: `http://localhost:8080/graphql`
+  - For Java backend: `http://localhost:8080/graphiql`
 
 - **Example Query**:
     ```graphql
@@ -184,14 +136,8 @@ For frontend:
 
 ### Running Tests
 
-#### Kotlin Backend Tests:
+#### Java Backend Tests:
 ```bash
-cd backend-kotlin
+cd backend-java
 ./gradlew test
-```
-
-#### Python Backend Tests:
-```bash
-cd backend-python
-poetry run pytest
 ```

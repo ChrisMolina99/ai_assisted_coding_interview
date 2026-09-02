@@ -1,4 +1,4 @@
-# Backend (Kotlin/Spring)
+# Backend (Java/Spring)
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
