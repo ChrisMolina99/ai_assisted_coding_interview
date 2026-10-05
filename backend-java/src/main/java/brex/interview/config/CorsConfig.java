@@ -31,7 +31,7 @@ public class CorsConfig implements WebMvcConfigurer {
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/graphql", config);
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }

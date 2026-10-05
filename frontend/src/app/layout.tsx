@@ -3,8 +3,8 @@ import "~/styles/globals.css";
 import { Providers } from "./providers";
 
 export const metadata = {
-  title: "Brex Interview Playground",
-  description: "Basic fullstack setup to start hacking",
+  title: "Business transfer demo",
+  description: "Send instant USD transfers between demo business accounts",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

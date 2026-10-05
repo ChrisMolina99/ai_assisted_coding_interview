@@ -29,7 +29,7 @@ export default function HelloWorldDashboard() {
           type: 'success', 
           text: 'Message created successfully!' 
         });
-        refetchMessages();
+        await refetchMessages();
       }
     } catch (error) {
       setMessage({ 
@@ -51,7 +51,7 @@ export default function HelloWorldDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Brex Interview Playground</h1>
-          <p className="text-gray-600">Let's start hacking!</p>
+          <p className="text-gray-600">Let&apos;s start hacking!</p>
         </div>
 
         {/* Create Message Card */}
@@ -85,7 +85,7 @@ export default function HelloWorldDashboard() {
             <p className="text-gray-500 text-center py-8">No messages yet</p>
           ) : (
             <div className="space-y-3">
-              {messagesData.latestMessages.map((message: any) => message && (
+              {messagesData.latestMessages.map((message) => message && (
                 <div key={message.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                   <div className="flex-1">
                     <p className="font-medium text-gray-900">{message.content}</p>

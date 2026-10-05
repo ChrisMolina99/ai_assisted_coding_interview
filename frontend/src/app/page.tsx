@@ -1,5 +1,5 @@
-import HelloWorldDashboard from "~/components/HelloWorldDashboard";
+import TransferDashboard from "~/components/TransferDashboard";
 
 export default function HomePage() {
-  return <HelloWorldDashboard />;
+  return <TransferDashboard />;
 }

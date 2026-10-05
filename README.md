@@ -1,5 +1,74 @@
 # Brex AI Assisted Interview Playground
 
+## Business transfer demo
+
+The home page provides a USD transfer demo between seeded business accounts.
+Select a business, choose a recipient, review a payment, then send it and view
+incoming and outgoing transfer history. Self-transfers are rejected.
+
+Businesses can also request money from another business. Create and review a
+request, then select the payer business to pay or decline it. The requester can
+cancel a pending request. Creating, declining, or cancelling requests moves no
+funds; payment settles the full requested amount through an atomic transfer.
+Insufficient funds leaves the request pending.
+
+Run the backend and frontend using the development commands below. The frontend
+uses the backend REST API at `http://localhost:8080` by default. Demo identity is
+selected in the UI and sent as `X-Business-Id`; this is not authentication.
+
+Transfers require an `Idempotency-Key`. Retrying the same request with the same
+key replays its outcome without moving funds again. Reusing a key with different
+input returns a conflict. If a submission has an uncertain outcome, retry that
+submission before starting another payment.
+
+V1 supports one USD account per business and immediate internal transfers. It
+does not connect banks, move real money, implement authorization, charge fees,
+exchange currencies, schedule payments, or reverse transfers. The configured H2
+database is in memory; restarting the backend resets balances and history.
+
+### REST contract
+
+`GET /api/businesses` discovers demo identities. All remaining endpoints require
+the `X-Business-Id` header:
+
+- `GET /api/accounts/me`: current account and balance in integer cents.
+- `GET /api/accounts/recipients?limit=20&cursor=...`: eligible recipient accounts.
+- `POST /api/transfers`: create a completed transfer; also requires
+  `Idempotency-Key`. Body: `recipientAccountId`, `amountInCents`, optional `reason`.
+- `GET /api/transfers/{transferId}`: a transfer involving the selected account.
+- `GET /api/transfers?startDate=...&endDate=...&limit=20&cursor=...`: completed
+  incoming and outgoing transfers, newest first. Dates are UTC instants, with an
+  inclusive start and exclusive end.
+- `POST /api/money-requests`: create a request with `payerAccountId`,
+  `amountInCents`, and optional `reason`.
+- `GET /api/money-requests?direction=incoming|outgoing&status=...&limit=20&cursor=...`:
+  requests to pay or requests sent. Default direction is incoming; omitted
+  status includes all states.
+- `GET /api/money-requests/{id}`: participant-scoped request details.
+- `POST /api/money-requests/{id}/pay`, `/decline`, or `/cancel`: resolve a pending
+  request. No body is required; an empty object is also accepted. Only the payer
+  can pay/decline; only the requester can cancel.
+
+All money-request mutations require `Idempotency-Key`. Request states are
+`PENDING`, `PAID`, `DECLINED`, and `CANCELLED`; paid requests include `transferId`.
+Partial payments, edits, expiration, reminders, and notifications are deferred.
+Unconfirmed request mutations retain their original input and key for safe
+retry, and block conflicting new mutations until resolved.
+
+Paged responses contain `items` and a nullable `nextCursor`. Amounts must be
+positive integer cents, up to 1,000,000,000 cents per transfer. Reasons are at
+most 280 characters. Errors contain `code`, `message`, and `fieldErrors`.
+
+### Verification
+
+Run `./gradlew test` in `backend-java/`, then `npm run typecheck` and
+`npm run build` in `frontend/`. Run the focused frontend checks with
+`node --test tests/*.test.mjs`. Integration checks should additionally exercise
+the running UI and API, including concurrent spending, duplicate request keys,
+self-transfer rejection, account-scoped history, and uncertain-outcome retries.
+Request-money checks cover participant roles, terminal-state races, no funds
+movement on creation/decline/cancel, and atomic payment linked to one transfer.
+
 This is a monorepo containing both the backend and frontend components for the Brex interview playground - a simple message system to get you started coding.
 
 ## Project Structure
